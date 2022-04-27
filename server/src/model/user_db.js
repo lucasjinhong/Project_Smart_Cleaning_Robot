@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 var userSchema = new Schema({
@@ -17,25 +17,19 @@ var userSchema = new Schema({
         required: [true, 'password is required']
     },
     email_authorization: {
-        authorization_code: {
-            type: Number
-        },
-        authorized:{
-            type: Boolean
-        },
-        authorized_date:{
-            type: Date
+        authorization_code: Number,
+        authorized: Boolean,
+        authorized_date: Date
+    },
+    homes: [
+        {
+            type: ObjectId,
+            ref: 'Home'
         }
-    },
-    register_date: {
-        type: Date
-    },
-    update_date: {
-        type: Date
-    },
-    last_login: {
-        type: Date
-    }
+    ],
+    register_date: Date,
+    update_date: Date,
+    last_login: Date
 })
 
 var User = mongoose.model('User', userSchema);

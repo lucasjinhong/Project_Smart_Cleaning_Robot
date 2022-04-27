@@ -8,7 +8,7 @@ const token_create = require('../utils/token_create');
 
 const register = require('../model/user_register');
 const login = require('../model/user_login');
-const verify = require('../model/user_verification');
+const verify = require('../model/token_verification');
 const update = require('../model/user_updateData');
 const emailAuthorize = require('../model/user_email_authorize');
 
