@@ -5,5 +5,6 @@ module.exports = {
         email: process.env.EMAIL,
         password: process.env.PASSWORD
     },
-    secret: process.env.SECRET
+    secret: process.env.SECRET,
+    mongopw: process.env.MONGOPW
 }

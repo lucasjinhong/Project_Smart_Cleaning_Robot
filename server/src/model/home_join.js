@@ -93,7 +93,7 @@ function userPush(id, data){
     })
 }
 
-module.exports = async function update(id, data){
+module.exports = async function joinHome(id, data){
     await checkId(id, data);
     await homeJoin(id, data);
     await userPush(id, data);
