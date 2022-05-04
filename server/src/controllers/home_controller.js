@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const Home = require('../model/home_db');
 
 const async_catch = require('../utils/async_catch');
-const verify = require('../utils/token_verification');
+const token_verification = require('../utils/token_verification');
+const id_check = require('../utils/id_check');
 
 const updateUser = require('../model/home_updateUser');
 const deleteHome = require('../model/home_delete');
@@ -25,44 +26,52 @@ exports.toCreate = async_catch(async(req, res, next) => {
 
     await data.save();
     await updateUser(auth, data._id)
-    await res.status(201).send("Create Success");
+    await res.status(201).send({message:'Create success', status:201});
 })
 
 exports.toDelete = async_catch(async(req, res, next) => {
     var token = req.headers['token'];
-    var auth = await verify(token);
+    var auth = await token_verification(token);
 
-    var data = req.params.home_id;
+    var id = req.params.home_id;
 
-    await deleteHome(auth, data)
-    await res.status(201).send("Delete Success");
+    await id_check(id);
+    await id_check(auth);
+    await deleteHome(auth, id);
+    await res.status(201).send({message:'Delete success', status:201});
 })
 
 exports.toJoin = async_catch(async(req, res, next) => {
     var token = req.headers['token'];
-    var auth = await verify(token);
+    var auth = await token_verification(token);
 
-    var data = req.params.home_id;
+    var id = req.params.home_id;
 
-    await joinHome(auth, data)
-    await res.status(201).send("Join Success");
+    await id_check(id);
+    await id_check(auth);
+    await joinHome(auth, id)
+    await res.status(201).send({message:'Join success', status:201});
 })
 
 exports.toQuit = async_catch(async(req, res, next) => {
     var token = req.headers['token'];
-    var auth = await verify(token);
+    var auth = await token_verification(token);
 
-    var data = req.params.home_id;
+    var id = req.params.home_id;
 
-    await quitHome(auth, data);
-    await res.status(201).send("Quit Success");
+    await id_check(id);
+    await id_check(auth);
+    await quitHome(auth, id);
+    await res.status(201).send({message:'quit success', status:201});
 })
 
 exports.toData = async_catch(async(req, res, next) => {
     var token = req.headers['token'];
+    await token_verification(token);
+
     var id = req.params.home_id;
 
-    await verify(token);
+    await id_check(id);
     var data = await getData(id);
-    await res.status(201).json(data);
+    await res.status(200).json({message:'data get success', status:200, data:data});
 })

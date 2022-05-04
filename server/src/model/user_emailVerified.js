@@ -1,4 +1,3 @@
-const user_mongoose = require('../db/user_mongoose');
 const User = require('./user_db');
 
 var result = {}
@@ -13,16 +12,13 @@ function checkCode (id, code){
         }
 
         User.findById({_id:id}, 'email_authorization', function(err, obj){
-
-            obj = obj.email_authorization.authorization_code;
-
             if(err){
                 result.status = 500;
                 result.message = err;
                 reject(result);
                 return;
             }
-            else if (obj !== code){
+            else if (obj.email_authorization.authorization_code !== code){
                 result.status = 422;
                 result.message = 'wrong verification code';
                 reject(result);
@@ -36,18 +32,8 @@ function checkCode (id, code){
 }
 
 function Authorize(id, data){
-
-    var re = /^[0-9a-fA-F]{24}$/;
-
     return new Promise((resolve, reject) => {
-        if(!re.test(id)){
-            result.status = 500;
-            result.message = 'id error';
-            reject(result);
-            return;
-        };
-
-        User.findByIdAndUpdate({_id:id}, data, function(err, obj){
+        User.findByIdAndUpdate({_id:id}, data, function(err){
             if(err){
                 result.status = 500;
                 result.message = err;
@@ -60,7 +46,6 @@ function Authorize(id, data){
         })
     })
 }
-
 
 module.exports = async function emailAuthorize(id, code, data){
     await checkCode(id, code);

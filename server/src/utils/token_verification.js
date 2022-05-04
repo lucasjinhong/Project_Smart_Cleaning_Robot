@@ -4,14 +4,12 @@ const env = require('../config/development_config');
 var result = {}
 
 function verification(token){
-
     const time = Math.floor(Date.now() / 1000);
 
     return new Promise((resolve, reject) => {
-
         if(!token){
-            result.status = 422;
-            result.message = 'pls input token';
+            result.status = 403;
+            result.message = 'missing token';
             reject(result);
             return;
         }
@@ -36,11 +34,10 @@ function verification(token){
 }
 
 function tokenCheck(token){
-
     return new Promise((resolve, reject) => {
         if(!token){
             result.status = 401;
-            result.message = 'invalid token';
+            result.message = 'token unauthorized';
             reject(result);
             return;
         }
@@ -51,7 +48,6 @@ function tokenCheck(token){
 }
 
 module.exports = async function verify(token){
-     
     var result = await tokenCheck(await verification(token));
     return result;
 }

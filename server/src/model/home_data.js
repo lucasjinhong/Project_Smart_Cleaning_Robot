@@ -1,23 +1,6 @@
-const user_mongoose = require('../db/user_mongoose');
 const Home = require('../model/home_db')
 
 result = {};
-
-function checkId(id){
-    return new Promise ((resolve, reject) => {
-
-        var re = /^[0-9a-fA-F]{24}$/;
-
-        if(!re.test(id)){
-            result.status = 500;
-            result.message = 'home id error';
-            reject(result);
-        }
-        else{
-            resolve();
-        }
-    })
-}
 
 function homeData(id){
     return new Promise ((resolve, reject) => {
@@ -36,6 +19,5 @@ function homeData(id){
 }
 
 module.exports = async function getData(id){
-    await checkId(id);
     return await homeData(id);
 }

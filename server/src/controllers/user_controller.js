@@ -5,12 +5,13 @@ const async_catch = require('../utils/async_catch');
 const email_send = require('../utils/email_send');
 const password_encryption = require('../utils/password_encryption');
 const token_create = require('../utils/token_create');
-const verify = require('../utils/token_verification');
+const token_verification = require('../utils/token_verification');
+const id_check = require('../utils/id_check');
 
 const register = require('../model/user_register');
 const login = require('../model/user_login');
 const update = require('../model/user_updateData');
-const emailAuthorize = require('../model/user_email_authorize');
+const emailAuthorize = require('../model/user_emailVerified');
 const emailSearch = require('../model/user_emailSearch');
 
 
@@ -33,7 +34,7 @@ exports.toRegister = async_catch(async(req, res, next) =>{
 
   await register(data);
   await res.setHeader('token', token_create.emailToken(data._id));
-  await res.status(201).json({message:'email sent', status:201});
+  await res.status(201).json({message:'email sent and data create', status:201, data:{_id:data.id}});
 
   email_send(data.email, random);
 });
@@ -49,7 +50,7 @@ exports.toLogin = async_catch(async(req, res, next) => {
 
   var search = await login(data);
   await res.setHeader('token', token_create.token(search._id));
-  await res.status(200).send('<h1>login successful</h1> <h2>200</h2>');
+  await res.status(200).send({message:'login success', status:200});
 })
 
 exports.toUpdate = async_catch(async(req, res, next) => {
@@ -63,9 +64,10 @@ exports.toUpdate = async_catch(async(req, res, next) => {
     update_date: new Date()
   });
 
-  var auth = await verify(token);
+  var auth = await token_verification(token);
+  await id_check(auth);
   await update(auth, data);
-  await res.status(200).send('<h1>update success</h1> <h2>200</h2>')
+  await res.status(200).send({message:'update success', status:200})
 })
 
 exports.toVerified = async_catch(async(req, res, next) => {
@@ -80,9 +82,10 @@ exports.toVerified = async_catch(async(req, res, next) => {
     },
   })
   
-  var auth = await verify(token);
+  var auth = await token_verification(token);
+  await id_check(auth);
   await emailAuthorize(auth, code, data);
-  await res.status(200).send('<h1>Email authorize</h1> <h2>200</h2>');
+  await res.status(200).send({message:'email verified', status:200});
 })
 
 exports.toResend = async_catch(async(req, res, next) => {
@@ -93,12 +96,13 @@ exports.toResend = async_catch(async(req, res, next) => {
     email_authorization:{
       authorization_code: random,
       authorized: false
-    }
+    },
   });
 
   email = await emailSearch(id, data);
+  await id_check(auth);
   await res.setHeader('token', token_create.emailToken(id));
-  await res.status(201).send('<h1>email send</h1> <h2>200</h2>');
+  await res.status(200).send({message:'email sent', status:200});
 
   email_send(email, random);
 })

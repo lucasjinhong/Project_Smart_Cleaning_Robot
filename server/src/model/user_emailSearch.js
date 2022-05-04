@@ -1,20 +1,9 @@
-const user_mongoose = require('../db/user_mongoose');
 const User = require('../model/user_db');
 
 result = {};
 
 function checkId(id){
     return new Promise ((resolve, reject) => {
-
-        var re = /^[0-9a-fA-F]{24}$/;
-
-        if(!re.test(id)){
-            result.status = 500;
-            result.message = 'user id error';
-            reject(result);
-            return;
-        };
-
         User.findById({_id:id}, '_id',function(err, obj){
             if(err){
                 result.status = 500;
@@ -38,7 +27,6 @@ function checkId(id){
 function checkAuthorize(id){
     return new Promise ((resolve, reject) => {
         User.findById({_id:id}, '-_id email_authorization.authorized', function(err, obj){
-            
             if(err){
                 result.status = 500;
                 result.message = err;

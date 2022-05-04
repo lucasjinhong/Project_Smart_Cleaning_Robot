@@ -32,7 +32,7 @@ function loginCheck(email, password){
 
 function lastLogin(email){
     return new Promise((resolve, reject) => {
-        User.findOneAndUpdate({email:email}, {last_login:new Date()}, function(err, obj){
+        User.findOneAndUpdate({email:email}, {last_login:new Date()}, function(err){
             if(err){
                 result.status = 500;
                 result.message = err;

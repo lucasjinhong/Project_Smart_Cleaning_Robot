@@ -6,23 +6,6 @@ result = {};
 
 function checkId(id, data){
     return new Promise ((resolve, reject) => {
-
-        var re = /^[0-9a-fA-F]{24}$/;
-
-        if(!re.test(id)){
-            result.status = 500;
-            result.message = 'user id error';
-            reject(result);
-            return;
-        };
-
-        if(!re.test(data)){
-            result.status = 500;
-            result.message = 'home id error';
-            reject(result);
-            return;
-        };
-
         Home.findById({_id:data}, function(err, obj){
             if(err){
                 result.status = 500;
