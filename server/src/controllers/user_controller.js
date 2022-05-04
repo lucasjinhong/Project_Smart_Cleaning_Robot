@@ -18,7 +18,7 @@ const emailSearch = require('../model/user_emailSearch');
 exports.toRegister = async_catch(async(req, res, next) =>{
 
   var password = password_encryption(req.body.password);
-  var random = Math.floor((Math.random() * 1000000) + 1);
+  var random = Math.floor((Math.random() * 1000000) + 100000);
 
   var data = new User({
     _id: mongoose.Types.ObjectId(),
