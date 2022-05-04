@@ -15,7 +15,7 @@ function checkId(id, data){
             }
             if(!obj.length){
                 result.status = 400;
-                result.message = 'user not in this home';
+                result.message = 'not in this home';
                 reject(result);
                 return;
             }

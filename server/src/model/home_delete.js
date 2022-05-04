@@ -1,4 +1,3 @@
-const user_mongoose = require('../db/user_mongoose');
 const User = require('../model/user_db');
 const Home = require('../model/home_db')
 
@@ -24,8 +23,8 @@ function checkId(id, data){
                 resolve();
             }
             else{
-                result.status = 400;
-                result.message = 'cant delete this home';
+                result.status = 403;
+                result.message = 'unauthorized';
                 reject(result);
                 return;
             }

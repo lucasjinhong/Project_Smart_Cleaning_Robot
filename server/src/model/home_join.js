@@ -15,7 +15,7 @@ function checkId(id, data){
             }
             if(obj.length){
                 result.status = 400;
-                result.message = 'user alr join this home';
+                result.message = 'home already joined';
                 reject(result);
                 return;
             }
