@@ -6,7 +6,7 @@ var user_controller = require('../src/controllers/user_controller')
 router.route('/register')
   .post(user_controller.toRegister);
 
-router.route('/verified/:id')
+router.route('/verified')
   .post (user_controller.toVerified);
 
 router.route('/login')
@@ -14,5 +14,8 @@ router.route('/login')
 
 router.route('/update')
   .put(user_controller.toUpdate);
+
+router.route('/resend/:id')
+  .post(user_controller.toResend);
 
 module.exports = router;

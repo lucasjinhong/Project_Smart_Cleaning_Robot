@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Home = require('../model/home_db');
 
 const async_catch = require('../utils/async_catch');
-const verify = require('../model/token_verification');
+const verify = require('../utils/token_verification');
 
 const updateUser = require('../model/home_updateUser');
 const deleteHome = require('../model/home_delete');
