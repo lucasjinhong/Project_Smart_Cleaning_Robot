@@ -14,12 +14,11 @@ var transporter = nodemailer.createTransport({
 });
 
 module.exports = function emailSend(email, code){
-
     var mailOptions = {
         from: env.email.email,
         to: email,
         subject: 'Authentication code of Nodejs',
-        text: 'the authentication code is' + code
+        text: 'the authentication code is ' + code
     };
 
     transporter.sendMail(mailOptions, function(err, data) {

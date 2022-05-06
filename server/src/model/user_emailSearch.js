@@ -46,7 +46,7 @@ function checkAuthorize(id){
     })
 }
 
-function emailSearch(id, data){
+function dataUpdate(id, data){
     return new Promise ((resolve, reject) => {
         User.findByIdAndUpdate({_id: id}, data, function(err, obj){
             if(err){
@@ -55,11 +55,15 @@ function emailSearch(id, data){
                 reject(result);
                 return;
             }
-            else {
+            else { 
                 resolve();
             }
         })
+    })
+}
 
+function emailSearch(id){
+    return new Promise ((resolve, reject) => {
         User.findById({_id: id}, '-_id email', function(err, obj){
             if(err){
                 result.status = 500;
@@ -68,7 +72,7 @@ function emailSearch(id, data){
                 return;
             }
             else {
-                resolve(obj);
+                resolve(obj.email);
             }
         })
     })
@@ -76,6 +80,7 @@ function emailSearch(id, data){
 
 module.exports = async function search(id, data){
     await checkId(id);
-    await checkAuthorize(id)
-    return await emailSearch(id, data);
+    await checkAuthorize(id);
+    await dataUpdate(id, data);
+    return await emailSearch(id);
 }

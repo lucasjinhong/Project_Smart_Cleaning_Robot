@@ -100,7 +100,6 @@ exports.toResend = async_catch(async(req, res, next) => {
   });
 
   email = await emailSearch(id, data);
-  await id_check(auth);
   await res.setHeader('token', token_create.emailToken(id));
   await res.status(200).send({message:'email sent', status:200});
 
