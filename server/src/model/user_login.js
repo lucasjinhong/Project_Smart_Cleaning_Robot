@@ -19,8 +19,9 @@ function loginCheck(email, password){
                 reject(result);
             }
             else if(!obj.email_authorization.authorized){
-                result.status = 401;
+                result.status = 403;
                 result.message = 'email unauthorized';
+                result.data = {_id:obj._id};
                 reject(result);
             }
             else{

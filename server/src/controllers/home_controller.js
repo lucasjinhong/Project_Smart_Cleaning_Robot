@@ -14,7 +14,7 @@ const getData = require('../model/home_data');
 
 exports.toCreate = async_catch(async(req, res, next) => {
     var token = req.headers['token'];
-    var auth = await verify(token);
+    var auth = await token_verification(token);
 
     var data = new Home({
         _id: mongoose.Types.ObjectId(),
