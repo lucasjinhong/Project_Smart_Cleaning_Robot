@@ -2,9 +2,9 @@ const Home = require('../model/home_db')
 
 result = {};
 
-function homeData(id){
+function pushData(id, data){
     return new Promise ((resolve, reject) => {
-        Home.findById({_id:id}, 'object updatedAt -_id', function(err, obj){
+        Home.findByIdAndUpdate({_id: id}, { $push: {object: data} }, function(err){
             if(err){
                 result.status = 500;
                 result.message = err;
@@ -12,12 +12,12 @@ function homeData(id){
                 return;
             }
             else{
-                resolve(obj);
+                resolve();
             }
         })
     })
 }
 
-module.exports = async function getData(id){
-    return await homeData(id);
+module.exports = async function updateData(id, data){
+    return await pushData(id, data);
 }

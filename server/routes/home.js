@@ -18,4 +18,7 @@ router.route('/quit/:home_id')
 router.route('/data/:home_id')
   .get(home_controller.toData);
 
+router.route('/data/:home_id')
+  .patch(home_controller.toUpdateData);
+
 module.exports = router;

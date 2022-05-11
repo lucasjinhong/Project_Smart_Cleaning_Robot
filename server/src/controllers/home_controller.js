@@ -10,6 +10,7 @@ const deleteHome = require('../model/home_delete');
 const joinHome = require('../model/home_join');
 const quitHome = require('../model/home_quit');
 const getData = require('../model/home_data');
+const pushData = require('../model/home_updateData');
 
 
 exports.toCreate = async_catch(async(req, res, next) => {
@@ -74,4 +75,13 @@ exports.toData = async_catch(async(req, res, next) => {
     await id_check(id);
     var data = await getData(id);
     await res.status(200).json({message:'data get success', status:200, data:data});
+})
+
+exports.toUpdateData = async_catch(async(req, res, next) => {
+    var id = req.params.home_id;
+    var data = req.body.object;
+
+    await id_check(id);
+    await pushData(id, data);
+    await res.status(200).json({message:'data push success', status:200});
 })

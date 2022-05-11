@@ -14,10 +14,9 @@ var homeSchema = new Schema({
             ref: 'User'
         }
     ],
-    data: [
+    object: [
         {
-            object: Array,
-            update_time: Date
+            type: String
         }
     ],
     create_by: {
