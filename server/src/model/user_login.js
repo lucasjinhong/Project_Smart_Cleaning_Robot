@@ -14,7 +14,6 @@ function loginCheck(email, password){
             }
 
             if(!obj){
-                console.log(obj);
                 result.status = 401;
                 result.message = 'login failed';
                 reject(result);

@@ -24,8 +24,7 @@ var homeSchema = new Schema({
         type: ObjectId,
         ref: 'User'
     },
-    create_date: Date
-})
+},{timestamps: true})
 
 var Home = mongoose.model('Home', homeSchema);
 

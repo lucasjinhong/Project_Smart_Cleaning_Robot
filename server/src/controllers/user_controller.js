@@ -12,6 +12,7 @@ const login = require('../model/user_login');
 const update = require('../model/user_updateData');
 const emailAuthorize = require('../model/user_emailVerified');
 const emailSearch = require('../model/user_emailSearch');
+const { off } = require('../model/user_db');
 
 
 exports.toRegister = async_catch(async(req, res, next) =>{
@@ -26,10 +27,10 @@ exports.toRegister = async_catch(async(req, res, next) =>{
     password: password,
     email_authorization:{
       authorization_code: random,
-      authorized: false
+      authorized: false,
+      expired_date: new Date(Date.now() + 10 * 60 * 1000)
     },
     register_date: new Date(),
-    expireAfterSeconds: 10
   });
 
   await data.save();
@@ -79,7 +80,8 @@ exports.toVerified = async_catch(async(req, res, next) => {
   var data = new User({
     email_authorization: {
       authorized: true,
-      authorized_date: new Date()
+      authorized_date: new Date(),
+      expired_date: {expires: off}
     },
   })
   

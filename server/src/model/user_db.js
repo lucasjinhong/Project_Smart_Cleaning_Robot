@@ -27,6 +27,10 @@ var userSchema = new Schema({
     email_authorization: {
         authorization_code: Number,
         authorized: Boolean,
+        expired_date: {
+            type: Date,
+            expires: 0
+        },
         authorized_date: Date
     },
     homes: [
@@ -35,13 +39,8 @@ var userSchema = new Schema({
             ref: 'Home'
         }
     ],
-    register_date:{
-        type: Date,
-        //expires: '10'
-    },
-    update_date: Date,
     last_login: Date
-})
+},{timestamps: true})
 
 var User = mongoose.model('User', userSchema);
 
