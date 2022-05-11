@@ -26,7 +26,7 @@ exports.toCreate = async_catch(async(req, res, next) => {
 
     await data.save();
     await updateUser(auth, data._id)
-    await res.status(201).send({message:'Create success', status:201});
+    await res.status(201).send({message:'Create success', status:201, data:{id:_id}});
 })
 
 exports.toDelete = async_catch(async(req, res, next) => {
