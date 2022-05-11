@@ -35,7 +35,10 @@ var userSchema = new Schema({
             ref: 'Home'
         }
     ],
-    register_date: Date,
+    register_date:{
+        type: Date,
+        //expires: '10'
+    },
     update_date: Date,
     last_login: Date
 })
