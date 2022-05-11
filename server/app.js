@@ -46,8 +46,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  //res.json(res.locals.error);
-  res.render('error');
+  res.json(res.locals.error);
+  //res.render('error');
 });
 
 module.exports = app;
