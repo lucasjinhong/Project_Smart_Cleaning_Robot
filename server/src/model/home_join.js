@@ -13,17 +13,20 @@ function checkId(id, data){
                 reject(result);
                 return;
             }
-            if(obj.length){
+            if(obj){
                 result.status = 400;
                 result.message = 'home already joined';
-                reject(result);
-                return;
+                return reject(result);
             }
             else {
                 resolve();
-            }
+            }          
         })
+    })
+}
 
+function checkHome(id, data){
+    return new Promise ((resolve, reject) => {
         Home.findById({_id:data}, function(err, obj){
             if(err){
                 result.status = 500;
@@ -34,6 +37,24 @@ function checkId(id, data){
             if(!obj){
                 result.status = 400;
                 result.message = 'home unavailable';
+                reject(result);
+                return;
+            }
+            else{
+                resolve();
+            }
+        })
+
+        Home.find({_id:data, users: {$in: [id]}}, function(err, obj){
+            if(err){
+                result.status = 500;
+                result.message = err;
+                reject(result);
+                return;
+            }
+            if(obj){
+                result.status = 400;
+                result.message = 'home already joined';
                 reject(result);
                 return;
             }
@@ -78,6 +99,7 @@ function userPush(id, data){
 
 module.exports = async function joinHome(id, data){
     await checkId(id, data);
+    await checkHome(id, data);
     await homeJoin(id, data);
     await userPush(id, data);
 }
