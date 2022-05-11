@@ -2,11 +2,19 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
+var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
 var userSchema = new Schema({
     _id: ObjectId,
     email: {
         type: String, 
-        required: [true, 'email is required']
+        required: [true, 'email is required'],
+        unique: true,
+        validate: 
+        {
+            validator: v => re.test(v),
+            message: 'wrong email format'
+        }
     },
     username: {
         type: String, 

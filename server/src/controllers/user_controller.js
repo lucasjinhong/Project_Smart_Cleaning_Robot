@@ -8,7 +8,6 @@ const token_create = require('../utils/token_create');
 const token_verification = require('../utils/token_verification');
 const id_check = require('../utils/id_check');
 
-const register = require('../model/user_register');
 const login = require('../model/user_login');
 const update = require('../model/user_updateData');
 const emailAuthorize = require('../model/user_emailVerified');
@@ -17,7 +16,7 @@ const emailSearch = require('../model/user_emailSearch');
 
 exports.toRegister = async_catch(async(req, res, next) =>{
 
-  var password = password_encryption(req.body.password);
+  var password = await password_encryption(req.body.password);
   var random = Math.floor((Math.random() * 1000000) + 100000);
 
   var data = new User({
@@ -29,10 +28,11 @@ exports.toRegister = async_catch(async(req, res, next) =>{
       authorization_code: random,
       authorized: false
     },
-    register_date: new Date()
+    register_date: new Date(),
+    expireAfterSeconds: 10
   });
 
-  await register(data);
+  await data.save();
   await res.setHeader('token', token_create.emailToken(data._id));
   await res.status(201).json({message:'email sent and data create', status:201, data:{_id:data.id}});
 
@@ -56,7 +56,7 @@ exports.toLogin = async_catch(async(req, res, next) => {
 exports.toUpdate = async_catch(async(req, res, next) => {
 
   var token = req.headers['token'];
-  var password = password_encryption(req.body.password);
+  var password = await password_encryption(req.body.password);
 
   var data = new User({
     username:req.body.username,
