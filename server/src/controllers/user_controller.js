@@ -43,7 +43,6 @@ exports.toRegister = async_catch(async(req, res, next) =>{
 exports.toLogin = async_catch(async(req, res, next) => {
 
   var password = await password_encryption(req.body.password);
-  console.log(password);
 
   var data = new User({
     email: req.body.email,

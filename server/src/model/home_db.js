@@ -11,7 +11,8 @@ var homeSchema = new Schema({
     users:[
         {
             type: ObjectId,
-            ref: 'User'
+            ref: 'User',
+            unique: false
         }
     ],
     object: [
@@ -21,7 +22,8 @@ var homeSchema = new Schema({
     ],
     create_by: {
         type: ObjectId,
-        ref: 'User'
+        ref: 'User',
+        unique: false
     },
 },{timestamps: true})
 

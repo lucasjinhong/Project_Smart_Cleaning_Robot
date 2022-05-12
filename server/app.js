@@ -36,8 +36,9 @@ app.use(function(err, req, res, next) {
     res.locals.error = {status: err.status, message: err.errors[key[0]].message};
   } 
   else if(err.code && err.code == 11000) {
+    const key = Object.keys(err.keyValue);
     err.status = 409;
-    res.locals.error = {status: err.status, message: err.keyValue.email + " existed"};
+    res.locals.error = {status: err.status, message: err.keyValue[key[0]] + " existed"};
   }
   else {
     res.locals.message = err.message;
