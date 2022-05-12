@@ -50,8 +50,10 @@ exports.toLogin = async_catch(async(req, res, next) => {
   })
 
   var search = await login(data);
+  var home = await User.findById(search.id, "homes -_id").populate("homes", "name updatedAt");
+
   await res.setHeader('token', token_create.token(search._id));
-  await res.status(200).send({message:'login success', status:200});
+  await res.status(200).send({message:'login success', status:200, data:home});
 })
 
 exports.toUpdate = async_catch(async(req, res, next) => {

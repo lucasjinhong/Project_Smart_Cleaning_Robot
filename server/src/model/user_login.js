@@ -31,23 +31,9 @@ function loginCheck(email, password){
     })
 };
 
-function lastLogin(email){
-    return new Promise((resolve, reject) => {
-        User.findOneAndUpdate({email:email}, {last_login:new Date()}, function(err){
-            if(err){
-                result.status = 500;
-                result.message = err;
-                reject(result);
-                return;
-            }
-
-            resolve();
-        })
-    })
-}
-
 module.exports = async function login(data) {
     let result = await loginCheck(data.email, data.password);
-    await lastLogin(data.email);
+    await User.findOneAndUpdate({email:data.email}, {last_login:new Date()});
+
     return result;
 }
