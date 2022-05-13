@@ -47,41 +47,12 @@ function checkHome(data){
     })
 }
 
-function homeJoin(id, data){
-    return new Promise ((resolve, reject) => {
-        Home.findByIdAndUpdate({_id: data}, { $push: { users: id } }, function(err, obj){
-            if(err){
-                result.status = 500;
-                result.message = err;
-                reject(result);
-                return;
-            }
-            else{
-                resolve();
-            }
-        })
-    })
-}
-
-function userPush(id, data){
-    return new Promise ((resolve, reject) => {
-        User.findByIdAndUpdate({_id:id}, { $push: { homes: data } }, function(err, obj){
-            if(err){
-                result.status = 500;
-                result.message = err;
-                reject(result);
-                return;
-            }
-            else{
-                resolve();
-            }
-        })
-    })
-}
 
 module.exports = async function joinHome(id, data){
     await checkId(id, data);
     await checkHome(data);
-    await homeJoin(id, data);
-    await userPush(id, data);
+    await Home.findByIdAndUpdate(data, { $push: { users: id } });
+    await User.findByIdAndUpdate(id, { $push: { homes: data } });
+    var name = await Home.findById(data, 'name -_id');
+    return name;
 }

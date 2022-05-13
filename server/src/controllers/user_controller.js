@@ -9,7 +9,6 @@ const token_verification = require('../utils/token_verification');
 const id_check = require('../utils/id_check');
 
 const login = require('../model/user_login');
-const update = require('../model/user_updateData');
 const emailAuthorize = require('../model/user_emailVerified');
 const emailSearch = require('../model/user_emailSearch');
 const { off } = require('../model/user_db');
@@ -69,7 +68,7 @@ exports.toUpdate = async_catch(async(req, res, next) => {
 
   var auth = await token_verification(token);
   await id_check(auth);
-  await update(auth, data);
+  await User.findByIdAndUpdate(auth, data);
   await res.status(200).send({message:'update success', status:200})
 })
 
@@ -107,5 +106,5 @@ exports.toResend = async_catch(async(req, res, next) => {
   await res.setHeader('token', token_create.emailToken(id));
   await res.status(200).send({message:'email sent', status:200});
 
-  email_send(email, random);
+  email_send(email.email, random);
 })

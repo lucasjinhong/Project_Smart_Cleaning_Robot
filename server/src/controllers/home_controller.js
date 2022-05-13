@@ -1,16 +1,15 @@
 const mongoose = require('mongoose');
 const Home = require('../model/home_db');
+const User = require('../model/user_db');
 
 const async_catch = require('../utils/async_catch');
 const token_verification = require('../utils/token_verification');
 const id_check = require('../utils/id_check');
 
-const updateUser = require('../model/home_updateUser');
 const deleteHome = require('../model/home_delete');
 const joinHome = require('../model/home_join');
 const quitHome = require('../model/home_quit');
 const getData = require('../model/home_data');
-const pushData = require('../model/home_updateData');
 
 
 exports.toCreate = async_catch(async(req, res, next) => {
@@ -26,7 +25,7 @@ exports.toCreate = async_catch(async(req, res, next) => {
     });
 
     await data.save();
-    await updateUser(auth, data._id)
+    await User.findByIdAndUpdate(auth, { $push: { homes: data._id } });
     await res.status(201).send({message:'Create success', status:201, data:{id:data._id}});
 })
 
@@ -50,8 +49,8 @@ exports.toJoin = async_catch(async(req, res, next) => {
 
     await id_check(id);
     await id_check(auth);
-    await joinHome(auth, id)
-    await res.status(201).send({message:'Join success', status:201});
+    var name = await joinHome(auth, id)
+    await res.status(201).send({message:'Join success', status:201, data:name});
 })
 
 exports.toQuit = async_catch(async(req, res, next) => {
@@ -82,6 +81,6 @@ exports.toUpdateData = async_catch(async(req, res, next) => {
     var data = req.body.object;
 
     await id_check(id);
-    await pushData(id, data);
+    await Home.findByIdAndUpdate(id, { $push: {object: data} });
     await res.status(200).json({message:'data push success', status:200});
 })

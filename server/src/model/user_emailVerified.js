@@ -31,24 +31,9 @@ function checkCode (id, code){
     })
 }
 
-function Authorize(id, data){
-    return new Promise((resolve, reject) => {
-        User.findByIdAndUpdate({_id:id}, data, function(err){
-            if(err){
-                result.status = 500;
-                result.message = err;
-                reject(result);
-                return;
-            }
-            else{
-                resolve();
-            }
-        })
-    })
-}
 
 module.exports = async function emailAuthorize(id, code, data){
     await checkCode(id, code);
-    await Authorize(id, data);
+    await User.findByIdAndUpdate(id, data);
     return;
 }

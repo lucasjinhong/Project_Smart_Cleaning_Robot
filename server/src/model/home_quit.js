@@ -44,22 +44,6 @@ function checkId(id, data){
     })
 }
 
-function homeQuit(id, data){
-    return new Promise ((resolve, reject) => {
-        Home.findByIdAndUpdate({_id: data}, { $pull: { users: id } }, function(err, obj){
-            if(err){
-                result.status = 500;
-                result.message = err;
-                reject(result);
-                return;
-            }
-            else{
-                resolve();
-            }
-        })
-    })
-}
-
 function checkHome(data){
     return new Promise ((resolve, reject) => {
         Home.findById({_id:data}, function(err, obj){
@@ -91,25 +75,9 @@ function checkHome(data){
 }
 
 
-function userPull(id, data){
-    return new Promise ((resolve, reject) => {
-        User.findByIdAndUpdate({_id:id}, { $pull: { homes: data } }, function(err, obj){
-            if(err){
-                result.status = 500;
-                result.message = err;
-                reject(result);
-                return;
-            }
-            else{
-                resolve();
-            }
-        })
-    })
-}
-
 module.exports = async function quitHome(id, data){
     await checkId(id, data);
-    await homeQuit(id, data);
+    await Home.findByIdAndUpdate(data, { $pull: { users: id } });
     await checkHome(data);
-    await userPull(id, data);
+    await User.findByIdAndUpdate(id, { $pull: { homes: data } });
 }

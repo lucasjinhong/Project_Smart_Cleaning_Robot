@@ -32,40 +32,9 @@ function checkId(id, data){
     })
 }
 
-function homeDelete(data){
-    return new Promise ((resolve, reject) => {
-        Home.findByIdAndDelete({_id: data}, function(err, obj){
-            if(err){
-                result.status = 500;
-                result.message = err;
-                reject(result);
-                return;
-            }
-            else{
-                resolve();
-            }
-        })
-    })
-}
-
-function userPull(id, data){
-    return new Promise ((resolve, reject) => {
-        User.findByIdAndUpdate({_id:id}, { $pull: { homes: data } }, function(err, obj){
-            if(err){
-                result.status = 500;
-                result.message = err;
-                reject(result);
-                return;
-            }
-            else{
-                resolve();
-            }
-        })
-    })
-}
 
 module.exports = async function deleteHome(id, data){
     await checkId(id, data);
-    await homeDelete(data);
-    await userPull(id, data);
+    await Home.findByIdAndDelete(data);
+    await User.findByIdAndUpdate(id, { $pull: { homes: data } })
 }

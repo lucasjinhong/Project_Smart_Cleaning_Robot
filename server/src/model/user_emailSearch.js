@@ -46,41 +46,10 @@ function checkAuthorize(id){
     })
 }
 
-function dataUpdate(id, data){
-    return new Promise ((resolve, reject) => {
-        User.findByIdAndUpdate({_id: id}, data, function(err, obj){
-            if(err){
-                result.status = 500;
-                result.message = err;
-                reject(result);
-                return;
-            }
-            else { 
-                resolve();
-            }
-        })
-    })
-}
-
-function emailSearch(id){
-    return new Promise ((resolve, reject) => {
-        User.findById({_id: id}, '-_id email', function(err, obj){
-            if(err){
-                result.status = 500;
-                result.message = err;
-                reject(result);
-                return;
-            }
-            else {
-                resolve(obj.email);
-            }
-        })
-    })
-}
 
 module.exports = async function search(id, data){
     await checkId(id);
     await checkAuthorize(id);
-    await dataUpdate(id, data);
-    return await emailSearch(id);
+    await User.findByIdAndUpdate(id, data);
+    return await User.findById(id, '-_id email');
 }
