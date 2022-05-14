@@ -91,8 +91,8 @@ def main():
                 print(json.dumps(payload))
 
             # Send http request
-                #r = requests.post(url, json.dumps(payload), headers=headers)
-                #print(f"Status Code: {r.status_code}, Response: {r.json()}")
+                r = requests.patch(url, json.dumps(payload), headers=headers)
+                print(f"Status Code: {r.status_code}, Response: {r.json()}")
 
             wait = 0
 
