@@ -18,7 +18,7 @@ Project's server-side code
   const url = 'mongodb+srv://username:'+ env.mongopw +'@cluster.ubcvr.mongodb.net/Database_Name?retryWrites=true&w=majority'
   ```
   5. **Username, Cluster, Database_Name must be changed**
-  6. You can get the link of your database by following the [tutorial](https://www.mongodb.com/docs/atlas/getting-started/)
+  6. You can follow the [tutorial](https://www.mongodb.com/docs/atlas/getting-started/) to get the link of the database
 
 ## Environment Variable
 
