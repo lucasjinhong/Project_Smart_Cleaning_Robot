@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongo_mongoose = require('../db/mongoose');
 const User = require('../model/user_db');
 
 const async_catch = require('../utils/async_catch');
@@ -18,6 +19,8 @@ exports.toRegister = async_catch(async(req, res, next) =>{
 
   var password = await password_encryption(req.body.password);
   var random = Math.floor((Math.random() * 1000000) + 100000);
+
+  //var random = 123456; //testing
 
   var data = new User({
     _id: mongoose.Types.ObjectId(),
@@ -94,6 +97,8 @@ exports.toVerified = async_catch(async(req, res, next) => {
 exports.toResend = async_catch(async(req, res, next) => {
   var random = Math.floor((Math.random() * 1000000) + 1);
   var id = req.params.id;
+
+  //var random = 1234567; //testing
 
   var data = new User({
     email_authorization:{

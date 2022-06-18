@@ -1,4 +1,3 @@
-const user_mongoose = require('../db/user_mongoose');
 const User = require('../model/user_db');
 const Home = require('../model/home_db')
 
