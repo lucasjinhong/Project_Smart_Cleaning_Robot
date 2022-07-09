@@ -13,7 +13,7 @@ def main():
     url = "http://35.77.46.57:3000/home/data/627bb1b46013fa5837d41835"
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
-    model = torch.hub.load('../yolo/yolov5', 'custom', path='../yolo/yolov5/runs/train/yolo_road_det5/weights/best.pt', source='local')
+    model = torch.hub.load('../yolo/yolov5', 'custom', path='../yolo/yolov5/runs/train/yolo_drinking_waste4/weights/best.pt', source='local')
     model.conf = 0.9
     model.source = 0
 
