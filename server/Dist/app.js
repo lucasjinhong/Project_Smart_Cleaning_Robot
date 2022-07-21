@@ -22,11 +22,11 @@ app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.use('/user', user_1.default);
 app.use('/home', home_1.default);
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use((_req, _res, next) => {
     next((0, http_errors_1.default)(404));
 });
 // error handler
-app.use(function (err, req, res) {
+app.use((err, req, res, next) => {
     // set locals, only providing error in development
     if (err.name === 'ValidationError') {
         const key = Object.keys(err.errors);
@@ -46,6 +46,10 @@ app.use(function (err, req, res) {
     res.status(err.status || 500);
     res.json(res.locals.error);
     //res.render('error');
+});
+const port = 3000;
+app.listen(port, () => {
+    console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
 });
 exports.default = app;
 //# sourceMappingURL=app.js.map

@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
-import Home from '../model/home_db';
-import User from '../model/user_db';
+import '../db/mongoose';
+import {Home} from '../model/home_db';
+import {User} from '../model/user_db';
 
-import async_catch from '../utils/async_catch';
-import token_verification from '../utils/token_verification';
-import id_check from '../utils/id_check';
+import {async_catch} from '../utils/async_catch';
+import {token_verification} from '../utils/token_verification';
+import {id_check} from '../utils/id_check';
 
 import deleteHome from '../model/home_delete';
 import joinHome from '../model/home_join';

@@ -1,5 +1,8 @@
-export = (fn:any) => {
-    return (req:any, res:any, next:any) => {
+import { NextFunction, Request, Response } from 'express';
+import 'express-async-errors'
+
+export const async_catch = (fn:any) => {
+    return (req:Request, res:Response, next:NextFunction) => {
         fn (req, res, next).catch((err:any) => next(err));
     }
 }

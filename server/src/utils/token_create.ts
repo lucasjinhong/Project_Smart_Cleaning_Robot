@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import {env} from '../config/development_config';
 
-export const token = (data:string) => {
+export const token_create = (data:string) => {
 
     const token = jwt.sign({
         algorithm: 'HS256',
@@ -12,7 +12,7 @@ export const token = (data:string) => {
     return token;
 }
 
-export const emailToken = (data:string) => {
+export const email_token = (data:string) => {
 
     const token = jwt.sign({
         algorithm: 'HS256',

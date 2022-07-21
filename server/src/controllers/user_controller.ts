@@ -1,17 +1,19 @@
 import mongoose from 'mongoose';
-import User from '../model/user_db';
+import '../db/mongoose';
+import {User} from '../model/user_db';
 
-import async_catch from '../utils/async_catch';
-import email_send from '../utils/email_send';
-import password_encryption from '../utils/password_encryption';
-import token_create from '../utils/token_create';
-import token_verification from '../utils/token_verification';
-import id_check from '../utils/id_check';
+import {async_catch} from '../utils/async_catch';
+import {email_send} from '../utils/email_send';
+import {password_encryption} from '../utils/password_encryption';
+import {token_create} from '../utils/token_create';
+import {email_token} from '../utils/token_create';
+import {token_verification} from '../utils/token_verification';
+import {id_check} from '../utils/id_check';
 
 import login from '../model/user_login';
 import emailAuthorize from '../model/user_emailVerified';
 import emailSearch from '../model/user_emailSearch';
-import { off } from '../model/user_db';
+import { off } from 'process';
 
 
 export const toRegister = async_catch(async(req:any, res:any) =>{
@@ -35,7 +37,7 @@ export const toRegister = async_catch(async(req:any, res:any) =>{
   });
 
   await data.save();
-  await res.setHeader('token', token_create.emailToken(data._id));
+  await res.setHeader('token', email_token(data._id));
   await res.status(201).json({message:'email sent and data create', status:201, data:{_id:data.id}});
 
   email_send(data.email, random);
@@ -50,10 +52,10 @@ export const toLogin = async_catch(async(req:any, res:any) => {
     password: password
   })
 
-  const search = await login(data);
+  const search:any = await login(data);
   const home = await User.findById(search.id, "homes -_id").populate("homes", "name updatedAt");
 
-  await res.setHeader('token', token_create.token(search._id));
+  await res.setHeader('token', token_create(search._id));
   await res.status(200).send({message:'login success', status:200, data:home});
 })
 
@@ -106,8 +108,8 @@ export const toResend = async_catch(async(req:any, res:any) => {
     },
   });
 
-  email = await emailSearch(id, data);
-  await res.setHeader('token', token_create.emailToken(id));
+  const email = await emailSearch(id, data);
+  await res.setHeader('token', email_token(id));
   await res.status(200).send({message:'email sent', status:200});
 
   email_send(email.email, random);

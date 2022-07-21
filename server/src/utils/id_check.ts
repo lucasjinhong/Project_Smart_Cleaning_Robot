@@ -10,7 +10,7 @@ const result:Result = {
     data: undefined
 }
 
-export const checkId = async(id:string) => {
+export const id_check = async(id:any) => {
     return new Promise ((resolve, reject) => {
         const re = /^[0-9a-fA-F]{24}$/;
         if(!re.test(id)){

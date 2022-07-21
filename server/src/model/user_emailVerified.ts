@@ -42,8 +42,10 @@ const checkCode = async(id:string, code:number) => {
 }
 
 
-export const emailAuthorize = async(id:string, code:number, data:any) => {
+const emailAuthorize = async(id:any, code:number, data:any) => {
     await checkCode(id, code);
     await User.findByIdAndUpdate(id, data);
     return;
 }
+
+export default emailAuthorize;

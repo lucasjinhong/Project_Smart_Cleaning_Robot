@@ -57,7 +57,7 @@ const checkHome = async(data:any) => {
 }
 
 
-module.exports = async function joinHome(id:string, data:any){
+const joinHome = async(id:any, data:any) => {
     await checkId(id, data);
     await checkHome(data);
     await Home.findByIdAndUpdate(data, { $push: { users: id } });
@@ -65,3 +65,5 @@ module.exports = async function joinHome(id:string, data:any){
     const name = await Home.findById(data, 'name -_id');
     return name;
 }
+
+export default joinHome;

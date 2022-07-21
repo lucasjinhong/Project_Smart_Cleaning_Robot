@@ -59,7 +59,7 @@ const tokenCheck = async(token:any) => {
     })
 }
 
-export const verified = async(token:string) => {
+export const token_verification = async(token:string) => {
     const result = await tokenCheck(await verification(token));
     return result;
 }

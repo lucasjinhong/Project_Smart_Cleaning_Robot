@@ -57,9 +57,11 @@ const checkAuthorize = async(id:string) => {
 }
 
 
-export const search = async (id: string, data:any) => {
+const search = async (id: string, data:any) => {
     await checkId(id);
     await checkAuthorize(id);
     await User.findByIdAndUpdate(id, data);
     return await User.findById(id, '-_id email');
 }
+
+export default search;

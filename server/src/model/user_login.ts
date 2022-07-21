@@ -40,9 +40,11 @@ const loginCheck = async(email:string, password:string) => {
     })
 };
 
-export const login = async(data:any) => {
+const login = async(data:any) => {
     const done = await loginCheck(data.email, data.password);
     await User.findOneAndUpdate({email:data.email}, {last_login:new Date()});
 
     return done;
 }
+
+export default login;

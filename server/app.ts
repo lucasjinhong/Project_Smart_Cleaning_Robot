@@ -7,6 +7,8 @@ import logger from 'morgan';
 import usersRouter from './routes/user';
 import homesRouter from './routes/home';
 
+import { NextFunction, Request, Response } from 'express';
+
 const app = express();
 
 // view engine setup
@@ -23,13 +25,14 @@ app.use('/user', usersRouter);
 app.use('/home', homesRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((_req, _res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err:any, req:any, res:any) {
+app.use((err:any, req:Request, res:Response, next:NextFunction) => {
   // set locals, only providing error in development
+
   if(err.name === 'ValidationError'){
     const key = Object.keys(err.errors);
     err.status = 422;
@@ -49,6 +52,12 @@ app.use(function(err:any, req:any, res:any) {
   res.status(err.status || 500);
   res.json(res.locals.error);
   //res.render('error');
+});
+
+const port = 3000;
+
+app.listen(port, () => {
+  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
 });
 
 export default app;

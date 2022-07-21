@@ -28,6 +28,8 @@ const homeData = async(id:string) => {
     })
 }
 
-export const getData = async(id:string) => {
+const getData = async(id:string) => {
     return await homeData(id);
 }
+
+export default getData;

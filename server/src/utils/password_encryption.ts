@@ -25,7 +25,7 @@ const passwordCheck = (password:string) => {
     })
 }
 
-export const encryption = async(password:string) => {
+export const password_encryption = async(password:string) => {
     
     await passwordCheck(password);
 

@@ -43,8 +43,10 @@ const checkId = async(id:string, data:any) => {
 }
 
 
-export const deleteHome = async(id:string, data:any) => {
+const deleteHome = async(id:any, data:any) => {
     await checkId(id, data);
     await Home.findByIdAndDelete(data);
     await User.findByIdAndUpdate(id, { $pull: { homes: data } })
 }
+
+export default deleteHome;

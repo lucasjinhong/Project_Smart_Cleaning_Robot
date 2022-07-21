@@ -84,9 +84,11 @@ const checkHome = async(data:any) => {
 }
 
 
-export const quitHome = async(id:string, data:any) => {
+const quitHome = async(id:any, data:any) => {
     await checkId(id, data);
     await Home.findByIdAndUpdate(data, { $pull: { users: id } });
     await checkHome(data);
     await User.findByIdAndUpdate(id, { $pull: { homes: data } });
 }
+
+export default quitHome;

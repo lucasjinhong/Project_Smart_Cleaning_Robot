@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-export const emailSend = async(email:string, code:number) =>{
+export const email_send = async(email:string, code:number) =>{
     const mailOptions = {
         from: env.email.email,
         to: email,
