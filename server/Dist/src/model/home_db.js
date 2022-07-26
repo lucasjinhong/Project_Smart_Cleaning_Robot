@@ -3,16 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Home = void 0;
 const mongoose_1 = require("mongoose");
 const Schema = mongoose_1.Schema;
-const ObjectId = mongoose_1.Types.ObjectId;
 const homeSchema = new Schema({
-    _id: ObjectId,
+    _id: mongoose_1.Types.ObjectId,
     name: {
         type: String,
         required: [true, 'name is required']
     },
     users: [
         {
-            type: ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'User',
             unique: false
         }
@@ -23,7 +22,7 @@ const homeSchema = new Schema({
         }
     ],
     create_by: {
-        type: ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'User',
         unique: false
     },

@@ -24,6 +24,7 @@ const checkCode = (id, code) => __awaiter(void 0, void 0, void 0, function* () {
             return;
         }
         user_db_1.User.findById({ _id: id }, 'email_authorization', (err, obj) => {
+            console.log(obj);
             if (err) {
                 result.status = 500;
                 result.message = err;

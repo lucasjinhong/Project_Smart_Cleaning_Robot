@@ -20,7 +20,7 @@ export const email_send = async(email:string, code:number) =>{
         text: 'the authentication code is ' + code
     };
 
-    transporter.sendMail(mailOptions, function(err) {
+    transporter.sendMail(mailOptions, (err:Error) => {
         if (err) {
             console.log("Error " + err);
         } else {

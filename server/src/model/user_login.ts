@@ -1,3 +1,4 @@
+import {Types} from 'mongoose';
 import {User} from '../model/user_db';
 
 interface Result {
@@ -12,9 +13,30 @@ const result: Result = {
     data: undefined
 };
 
+interface Obj {
+    email_authorization: {
+        authorized: boolean,
+        authorized_date: Date
+    },
+    _id: string,
+    email: string,
+    username: string,
+    password: string,
+    homes: string[],
+    createdAt: Date,
+    updatedAt: Date,
+    __v: number,
+    last_login: Date
+}
+
+interface Data {
+    email: string,
+    password: string
+}
+
 const loginCheck = async(email:string, password:string) => {
-    return new Promise((resolve, reject) => {
-        User.findOne({email:email, password:password}, (err:any, obj:any) => {
+    return new Promise<string>((resolve, reject) => {
+        User.findOne({email:email, password:password}, (err:string, obj:Obj) => {
             if(err){
                 result.status = 500;
                 result.message = err;
@@ -34,16 +56,15 @@ const loginCheck = async(email:string, password:string) => {
                 reject(result);
             }
             else{
-                resolve(obj);
+                resolve(obj._id);
             }
         })
     })
 };
 
-const login = async(data:any) => {
+const login = async(data:Data) => {
     const done = await loginCheck(data.email, data.password);
     await User.findOneAndUpdate({email:data.email}, {last_login:new Date()});
-
     return done;
 }
 

@@ -20,10 +20,10 @@ const result = {
     message: 'error',
     data: undefined
 };
-let verify = {};
+let verify = '';
 const verification = (token) => __awaiter(void 0, void 0, void 0, function* () {
     const time = Math.floor(Date.now() / 1000);
-    return new Promise((resolve, reject) => {
+    const p = new Promise((resolve, reject) => {
         if (!token) {
             result.status = 403;
             result.message = 'missing token';
@@ -33,11 +33,11 @@ const verification = (token) => __awaiter(void 0, void 0, void 0, function* () {
         if (token) {
             jsonwebtoken_1.default.verify(token, development_config_1.env.secret, (err, decoded) => {
                 if (err) {
-                    verify = false;
+                    verify = '';
                     resolve(verify);
                 }
                 else if (decoded.exp <= time) {
-                    verify = false;
+                    verify = '';
                     resolve(verify);
                 }
                 else {
@@ -47,9 +47,10 @@ const verification = (token) => __awaiter(void 0, void 0, void 0, function* () {
             });
         }
     });
+    return p;
 });
 const tokenCheck = (token) => __awaiter(void 0, void 0, void 0, function* () {
-    return new Promise((resolve, reject) => {
+    const p = new Promise((resolve, reject) => {
         if (!token) {
             result.status = 401;
             result.message = 'token unauthorized';
@@ -60,9 +61,11 @@ const tokenCheck = (token) => __awaiter(void 0, void 0, void 0, function* () {
             resolve(token);
         }
     });
+    return p;
 });
 const token_verification = (token) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield tokenCheck(yield verification(token));
+    const t = token.substr(7, token.length);
+    const result = yield tokenCheck(yield verification(t));
     return result;
 });
 exports.token_verification = token_verification;

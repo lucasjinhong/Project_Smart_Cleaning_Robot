@@ -14,7 +14,7 @@ import getData from '../model/home_data';
 
 
 export const toCreate = async_catch(async(req:any, res:any) => {
-    const token = req.headers['token'];
+    const token = req.headers['authorization'];
     const auth = await token_verification(token);
 
     const data = new Home({

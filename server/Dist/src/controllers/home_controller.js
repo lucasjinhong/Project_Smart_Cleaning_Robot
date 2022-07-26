@@ -25,7 +25,7 @@ const home_join_1 = __importDefault(require("../model/home_join"));
 const home_quit_1 = __importDefault(require("../model/home_quit"));
 const home_data_1 = __importDefault(require("../model/home_data"));
 exports.toCreate = (0, async_catch_1.async_catch)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers['token'];
+    const token = req.headers['authorization'];
     const auth = yield (0, token_verification_1.token_verification)(token);
     const data = new home_db_1.Home({
         _id: new mongoose_1.default.Types.ObjectId(),

@@ -13,7 +13,7 @@ const result:Result = {
 };
 
 const passwordCheck = (password:string) => {
-    return new Promise ((resolve, reject) => {
+    return new Promise<string|undefined> ((resolve, reject) => {
         if(password.length < 6 || password.length > 12){
             result.status = 409;
             result.message = "password is required in length (6~12)";

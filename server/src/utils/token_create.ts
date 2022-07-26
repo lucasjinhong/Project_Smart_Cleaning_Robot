@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import {env} from '../config/development_config';
+import {Types} from 'mongoose';
 
 export const token_create = (data:string) => {
 
@@ -9,7 +10,7 @@ export const token_create = (data:string) => {
         data: data
     }, env.secret);
 
-    return token;
+    return 'Bearer ' + token;
 }
 
 export const email_token = (data:string) => {
@@ -20,5 +21,5 @@ export const email_token = (data:string) => {
         data: data
     }, env.secret);
 
-    return token;
+    return 'Bearer ' + token;
 }

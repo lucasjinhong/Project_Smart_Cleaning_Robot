@@ -18,7 +18,7 @@ const result = {
 const id_check = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return new Promise((resolve, reject) => {
         const re = /^[0-9a-fA-F]{24}$/;
-        if (!re.test(id)) {
+        if (!re.test(String(id))) {
             result.status = 400;
             result.message = 'id error';
             reject(result);

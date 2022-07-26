@@ -36,7 +36,7 @@ const loginCheck = (email, password) => __awaiter(void 0, void 0, void 0, functi
                 reject(result);
             }
             else {
-                resolve(obj);
+                resolve(obj._id);
             }
         });
     });

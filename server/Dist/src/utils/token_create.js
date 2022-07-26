@@ -12,7 +12,7 @@ const token_create = (data) => {
         exp: Math.floor(Date.now() / 1000) + (60 * 60),
         data: data
     }, development_config_1.env.secret);
-    return token;
+    return 'Bearer ' + token;
 };
 exports.token_create = token_create;
 const email_token = (data) => {
@@ -21,7 +21,7 @@ const email_token = (data) => {
         exp: Math.floor(Date.now() / 1000) + (60 * 10),
         data: data
     }, development_config_1.env.secret);
-    return token;
+    return 'Bearer ' + token;
 };
 exports.email_token = email_token;
 //# sourceMappingURL=token_create.js.map

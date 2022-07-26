@@ -32,7 +32,7 @@ const email_send = (email, code) => __awaiter(void 0, void 0, void 0, function* 
         subject: 'Authentication code of Nodejs',
         text: 'the authentication code is ' + code
     };
-    transporter.sendMail(mailOptions, function (err) {
+    transporter.sendMail(mailOptions, (err) => {
         if (err) {
             console.log("Error " + err);
         }

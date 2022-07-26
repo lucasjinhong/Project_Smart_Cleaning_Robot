@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, {Types} from 'mongoose';
 import '../db/mongoose';
 import {User} from '../model/user_db';
 
@@ -13,10 +13,12 @@ import {id_check} from '../utils/id_check';
 import login from '../model/user_login';
 import emailAuthorize from '../model/user_emailVerified';
 import emailSearch from '../model/user_emailSearch';
+
 import { off } from 'process';
+import { Request, Response } from 'express';
 
 
-export const toRegister = async_catch(async(req:any, res:any) =>{
+export const toRegister = async_catch(async(req:Request, res:Response) =>{
 
   const password = await password_encryption(req.body.password);
   const random = Math.floor((Math.random() * 1000000) + 100000);
@@ -28,7 +30,7 @@ export const toRegister = async_catch(async(req:any, res:any) =>{
     email: req.body.email,
     username: req.body.username,
     password: password,
-    email_authorization:{
+    email_authorization: {
       authorization_code: random,
       authorized: false,
       expired_date: new Date(Date.now() + 10 * 60 * 1000)
@@ -37,13 +39,13 @@ export const toRegister = async_catch(async(req:any, res:any) =>{
   });
 
   await data.save();
-  await res.setHeader('token', email_token(data._id));
-  await res.status(201).json({message:'email sent and data create', status:201, data:{_id:data.id}});
+  res.setHeader('token', email_token(String(data._id)));
+  res.status(201).json({ message: 'email sent and data create', status: 201, data: { _id: data.id } });
 
   email_send(data.email, random);
 });
 
-export const toLogin = async_catch(async(req:any, res:any) => {
+export const toLogin = async_catch(async(req:Request, res:Response) => {
 
   const password = await password_encryption(req.body.password);
 
@@ -52,16 +54,16 @@ export const toLogin = async_catch(async(req:any, res:any) => {
     password: password
   })
 
-  const search:any = await login(data);
-  const home = await User.findById(search.id, "homes -_id").populate("homes", "name updatedAt");
+  const search = await login(data);
+  const home = await User.findById(search, "homes -_id").populate("homes", "name updatedAt");
 
-  await res.setHeader('token', token_create(search._id));
-  await res.status(200).send({message:'login success', status:200, data:home});
+  res.setHeader('authorization', token_create(search));
+  res.status(200).send({ message: 'login success', status: 200, data: home });
 })
 
-export const toUpdate = async_catch(async(req:any, res:any) => {
+export const toUpdate = async_catch(async(req:Request, res:Response) => {
 
-  const token = req.headers['token'];
+  const token = req.headers['authorization'];
   const password = await password_encryption(req.body.password);
 
   const data = new User({
@@ -70,16 +72,16 @@ export const toUpdate = async_catch(async(req:any, res:any) => {
     update_date: new Date()
   });
 
-  const auth = await token_verification(token);
+  const auth:string = await token_verification(token);
   await id_check(auth);
   await User.findByIdAndUpdate(auth, data);
-  await res.status(200).send({message:'update success', status:200})
+  res.status(200).send({ message: 'update success', status: 200 })
 })
 
-export const toVerified = async_catch(async(req:any, res:any) => {
+export const toVerified = async_catch(async(req:Request, res:Response) => {
 
   const code = req.body.code;
-  const token = req.headers['token'];
+  const token = req.headers['authorization'];
   
   const data = new User({
     email_authorization: {
@@ -92,10 +94,10 @@ export const toVerified = async_catch(async(req:any, res:any) => {
   const auth = await token_verification(token);
   await id_check(auth);
   await emailAuthorize(auth, code, data);
-  await res.status(200).send({message:'email verified', status:200});
+  res.status(200).send({ message: 'email verified', status: 200 });
 })
 
-export const toResend = async_catch(async(req:any, res:any) => {
+export const toResend = async_catch(async(req:Request, res:Response) => {
   const random = Math.floor((Math.random() * 1000000) + 1);
   const id = req.params.id;
 
@@ -109,8 +111,8 @@ export const toResend = async_catch(async(req:any, res:any) => {
   });
 
   const email = await emailSearch(id, data);
-  await res.setHeader('token', email_token(id));
-  await res.status(200).send({message:'email sent', status:200});
+  res.setHeader('token', email_token(id));
+  res.status(200).send({ message: 'email sent', status: 200 });
 
   email_send(email.email, random);
 })

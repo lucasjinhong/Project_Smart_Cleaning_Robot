@@ -44,8 +44,8 @@ exports.toRegister = (0, async_catch_1.async_catch)((req, res) => __awaiter(void
         register_date: new Date(),
     });
     yield data.save();
-    yield res.setHeader('token', (0, token_create_2.email_token)(data._id));
-    yield res.status(201).json({ message: 'email sent and data create', status: 201, data: { _id: data.id } });
+    res.setHeader('token', (0, token_create_2.email_token)(String(data._id)));
+    res.status(201).json({ message: 'email sent and data create', status: 201, data: { _id: data.id } });
     (0, email_send_1.email_send)(data.email, random);
 }));
 exports.toLogin = (0, async_catch_1.async_catch)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -55,12 +55,12 @@ exports.toLogin = (0, async_catch_1.async_catch)((req, res) => __awaiter(void 0,
         password: password
     });
     const search = yield (0, user_login_1.default)(data);
-    const home = yield user_db_1.User.findById(search.id, "homes -_id").populate("homes", "name updatedAt");
-    yield res.setHeader('token', (0, token_create_1.token_create)(search._id));
-    yield res.status(200).send({ message: 'login success', status: 200, data: home });
+    const home = yield user_db_1.User.findById(search, "homes -_id").populate("homes", "name updatedAt");
+    res.setHeader('authorization', (0, token_create_1.token_create)(search));
+    res.status(200).send({ message: 'login success', status: 200, data: home });
 }));
 exports.toUpdate = (0, async_catch_1.async_catch)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers['token'];
+    const token = req.headers['authorization'];
     const password = yield (0, password_encryption_1.password_encryption)(req.body.password);
     const data = new user_db_1.User({
         username: req.body.username,
@@ -70,11 +70,11 @@ exports.toUpdate = (0, async_catch_1.async_catch)((req, res) => __awaiter(void 0
     const auth = yield (0, token_verification_1.token_verification)(token);
     yield (0, id_check_1.id_check)(auth);
     yield user_db_1.User.findByIdAndUpdate(auth, data);
-    yield res.status(200).send({ message: 'update success', status: 200 });
+    res.status(200).send({ message: 'update success', status: 200 });
 }));
 exports.toVerified = (0, async_catch_1.async_catch)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const code = req.body.code;
-    const token = req.headers['token'];
+    const token = req.headers['authorization'];
     const data = new user_db_1.User({
         email_authorization: {
             authorized: true,
@@ -85,7 +85,7 @@ exports.toVerified = (0, async_catch_1.async_catch)((req, res) => __awaiter(void
     const auth = yield (0, token_verification_1.token_verification)(token);
     yield (0, id_check_1.id_check)(auth);
     yield (0, user_emailVerified_1.default)(auth, code, data);
-    yield res.status(200).send({ message: 'email verified', status: 200 });
+    res.status(200).send({ message: 'email verified', status: 200 });
 }));
 exports.toResend = (0, async_catch_1.async_catch)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const random = Math.floor((Math.random() * 1000000) + 1);
@@ -98,8 +98,8 @@ exports.toResend = (0, async_catch_1.async_catch)((req, res) => __awaiter(void 0
         },
     });
     const email = yield (0, user_emailSearch_1.default)(id, data);
-    yield res.setHeader('token', (0, token_create_2.email_token)(id));
-    yield res.status(200).send({ message: 'email sent', status: 200 });
+    res.setHeader('token', (0, token_create_2.email_token)(id));
+    res.status(200).send({ message: 'email sent', status: 200 });
     (0, email_send_1.email_send)(email.email, random);
 }));
 //# sourceMappingURL=user_controller.js.map

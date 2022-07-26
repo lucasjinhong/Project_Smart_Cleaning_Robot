@@ -3,10 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const mongoose_1 = require("mongoose");
 const Schema = mongoose_1.Schema;
-const ObjectId = mongoose_1.Types.ObjectId;
 const re = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 const userSchema = new Schema({
-    _id: ObjectId,
+    _id: mongoose_1.Types.ObjectId,
     email: {
         type: String,
         required: [true, 'email is required'],
@@ -35,7 +34,7 @@ const userSchema = new Schema({
     },
     homes: [
         {
-            type: ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'Home'
         }
     ],

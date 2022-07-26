@@ -1,11 +1,27 @@
 import { Schema as _Schema, model, Types } from 'mongoose';
 const Schema = _Schema;
-const ObjectId = Types.ObjectId;
 
 const re = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
-const userSchema = new Schema({
-    _id: ObjectId,
+interface IUser {
+    _id: Types.ObjectId,
+    email: string,
+    username: string,
+    password: string,
+    email_authorization: Email_authorization,
+    homes: Types.Array<Types.ObjectId|null>,
+    last_login: Date|null
+}
+
+interface Email_authorization {
+    authorization_code: number|null,
+    authorized: boolean,
+    expired_date: Date|null,
+    authorized_date: Date
+}
+
+const userSchema = new Schema<IUser>({
+    _id: Types.ObjectId,
     email: {
         type: String, 
         required: [true, 'email is required'],
@@ -35,11 +51,11 @@ const userSchema = new Schema({
     },
     homes: [
         {
-            type: ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'Home'
         }
     ],
     last_login: Date
 },{timestamps: true})
 
-export const User = model('User', userSchema);
+export const User = model<IUser>('User', userSchema);

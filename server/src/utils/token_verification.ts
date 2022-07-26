@@ -13,12 +13,12 @@ const result:Result = {
     data: undefined
 };
 
-let verify = {};
+let verify = '';
 
 const verification = async(token:string) => {
     const time = Math.floor(Date.now() / 1000);
 
-    return new Promise((resolve, reject) => {
+    const p = new Promise<string>((resolve, reject) => {
         if(!token){
             result.status = 403;
             result.message = 'missing token';
@@ -27,13 +27,13 @@ const verification = async(token:string) => {
         }
 
         if(token){
-            jwt.verify(token, env.secret, (err:any, decoded:any) => {
+            jwt.verify(token, env.secret, (err:Error, decoded:{exp:number; data:string}) => {
                 if(err){
-                    verify = false;
+                    verify = '';
                     resolve(verify);
                 }
                 else if(decoded.exp <= time) {
-                    verify = false;
+                    verify = '';
                     resolve(verify);
                 }
                 else {
@@ -43,10 +43,12 @@ const verification = async(token:string) => {
             })
         }
     });
+
+    return p;
 }
 
-const tokenCheck = async(token:any) => {
-    return new Promise((resolve, reject) => {
+const tokenCheck = async(token:string) => {
+    const p = new Promise<string>((resolve, reject) => {
         if(!token){
             result.status = 401;
             result.message = 'token unauthorized';
@@ -57,9 +59,12 @@ const tokenCheck = async(token:any) => {
             resolve(token);
         }
     })
+
+    return p;
 }
 
 export const token_verification = async(token:string) => {
-    const result = await tokenCheck(await verification(token));
+    const t = token.substr(7,token.length);
+    const result = await tokenCheck(await verification(t));
     return result;
 }

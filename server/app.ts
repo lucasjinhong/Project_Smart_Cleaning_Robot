@@ -7,32 +7,12 @@ import logger from 'morgan';
 import usersRouter from './routes/user';
 import homesRouter from './routes/home';
 
-import { NextFunction, Request, Response } from 'express';
+import type { ErrorRequestHandler } from "express";
 
 const app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/user', usersRouter);
-app.use('/home', homesRouter);
-
-// catch 404 and forward to error handler
-app.use((_req, _res, next) => {
-  next(createError(404));
-});
-
-// error handler
-app.use((err:any, req:Request, res:Response, next:NextFunction) => {
-  // set locals, only providing error in development
-
+// error handler function
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if(err.name === 'ValidationError'){
     const key = Object.keys(err.errors);
     err.status = 422;
@@ -52,7 +32,27 @@ app.use((err:any, req:Request, res:Response, next:NextFunction) => {
   res.status(err.status || 500);
   res.json(res.locals.error);
   //res.render('error');
+};
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/user', usersRouter);
+app.use('/home', homesRouter);
+
+// catch 404 and forward to error handler
+app.use((_req, _res, next) => {
+  next(createError(404));
 });
+
+app.use(errorHandler);
 
 const port = 3000;
 

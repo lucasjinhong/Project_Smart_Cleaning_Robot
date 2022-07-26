@@ -6,6 +6,15 @@ interface Result {
     data: any;
 }
 
+interface Email_authorization {
+    email_authorization:{
+        authorization_code: number|null,
+        authorized: boolean,
+        expired_date: Date|null,
+        authorized_date: Date
+    }
+}
+
 const result:Result = {
     status: 400,
     message: 'error',
@@ -13,7 +22,7 @@ const result:Result = {
 };
 
 const checkCode = async(id:string, code:number) => {
-    return new Promise((resolve, reject) => {
+    return new Promise<undefined>((resolve, reject) => {
         if(!code){
             result.status = 422;
             result.message = 'pls input code';
@@ -21,7 +30,8 @@ const checkCode = async(id:string, code:number) => {
             return;
         }
 
-        User.findById({_id:id}, 'email_authorization', (err:any, obj:any) => {
+        User.findById({_id:id}, 'email_authorization', (err:string, obj:Email_authorization) => {
+            console.log(obj)
             if(err){
                 result.status = 500;
                 result.message = err;
@@ -42,7 +52,7 @@ const checkCode = async(id:string, code:number) => {
 }
 
 
-const emailAuthorize = async(id:any, code:number, data:any) => {
+const emailAuthorize = async(id:string, code:number, data:Email_authorization) => {
     await checkCode(id, code);
     await User.findByIdAndUpdate(id, data);
     return;
